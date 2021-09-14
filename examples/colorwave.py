@@ -4,9 +4,9 @@
 import time
 from neopixel import Neopixel
 
-numpix = 60
-strip = Neopixel(numpix, 1, 1, "GRB")
-# strip = Neopixel(numpix, 0, 0, "GRBW")
+numpix = 8
+pinnum = 16
+strip = Neopixel(numpix, 0, pinnum, "GRB")
 
 red = (255, 0, 0)
 orange = (255, 50, 0)

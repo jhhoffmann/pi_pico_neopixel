@@ -1,8 +1,9 @@
 import time
 from neopixel import Neopixel
 
-numpix = 60
-strip = Neopixel(numpix, 0, 0, "RGBW")
+numpix = 8
+pinnum = 16
+strip = Neopixel(numpix, 0, pinnum, "GRB")
 
 red = (255, 0, 0)
 orange = (255, 165, 0)
@@ -18,8 +19,8 @@ colors_rgbw = [color+tuple([0]) for color in colors_rgb]
 colors_rgbw.append((0, 0, 0, 255))
 
 # uncomment colors_rgb if you have RGB strip
-# colors = colors_rgb
-colors = colors_rgbw
+colors = colors_rgb
+#colors = colors_rgbw
 
 strip.brightness(42)
 
@@ -27,5 +28,5 @@ while True:
     for color in colors:
         for i in range(numpix):
             strip.set_pixel(i, color)
-            time.sleep(0.01)
+            time.sleep(0.05)
             strip.show()
