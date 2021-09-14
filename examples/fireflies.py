@@ -22,40 +22,49 @@ colors_rgbw.append((0, 0, 0, 255))
 colors = colors_rgb
 # colors = colors_rgbw
 
-max_len=20
-min_len = 5
+max_len = 32
+min_len = 16
 #pixelnum, posn in flash, flash_len, direction
 flashing = []
 
-num_flashes = 10
+num_flashes = 5
+
+FL_PIXEL = 0
+FL_COLOR = 1
+FL_COLOR_RED = 0
+FL_COLOR_GREEN = 1
+FL_COLOR_BLUE = 2
+FL_LEN = 2
+FL_COUNT = 3
+FL_DIR = 4
+FL_DIR_UP = 1
+FL_DIR_DOWN = -1
 
 for i in range(num_flashes):
-    pix = random.randint(0, numpix - 1)
-    col = random.randint(1, len(colors) - 1)
+    pix = random.randrange(0, numpix)
+    col = random.randrange(0, len(colors))
     flash_len = random.randint(min_len, max_len)
-    flashing.append([pix, colors[col], flash_len, 0, 1])
+    flashing.append([pix, colors[col], flash_len, 0, FL_DIR_UP])
     
 strip.fill((0,0,0))
 
 while True:
     strip.show()
-    for i in range(num_flashes):
+    for fl_index in range(num_flashes):
 
-        pix = flashing[i][0]
-        brightness = (flashing[i][3]/flashing[i][2])
-        colr = (int(flashing[i][1][0]*brightness), 
-                int(flashing[i][1][1]*brightness), 
-                int(flashing[i][1][2]*brightness))
+        pix = flashing[fl_index][FL_PIXEL]
+        brightness = (flashing[fl_index][FL_COUNT]/flashing[fl_index][FL_LEN])
+        colr = (int(flashing[fl_index][FL_COLOR][FL_COLOR_RED]*brightness),
+                int(flashing[fl_index][FL_COLOR][FL_COLOR_GREEN]*brightness),
+                int(flashing[fl_index][FL_COLOR][FL_COLOR_BLUE]*brightness))
         strip.set_pixel(pix, colr)
 
-        if flashing[i][2] == flashing[i][3]:
-            flashing[i][4] = -1
-        if flashing[i][3] == 0 and flashing[i][4] == -1:
-            pix = random.randint(0, numpix - 1)
-            col = random.randint(0, len(colors) - 1)
+        if flashing[fl_index][FL_LEN] == flashing[fl_index][FL_COUNT]:
+            flashing[fl_index][FL_DIR] = FL_DIR_DOWN
+        if flashing[fl_index][FL_COUNT] == 0 and flashing[fl_index][FL_DIR] == FL_DIR_DOWN:
+            pix = random.randrange(0, numpix)
+            col = random.randrange(0, len(colors))
             flash_len = random.randint(min_len, max_len)
-            flashing[i] = [pix, colors[col], flash_len, 0, 1]
-        flashing[i][3] = flashing[i][3] + flashing[i][4]
+            flashing[fl_index] = [pix, colors[col], flash_len, 0, 1]
+        flashing[fl_index][FL_COUNT] = flashing[fl_index][FL_COUNT] + flashing[fl_index][FL_DIR]
         time.sleep(0.005)
-            
- 
